@@ -34,7 +34,7 @@ class ImplacableZonesDetector:
     Debe coincidir EXACTAMENTE con TradingView o FALLAR
     """
     
-    def __init__(self, symbol: str = "ETHUSDT", timeframe: str = "1h"):
+    def __init__(self, symbol: str = "BTCUSDT", timeframe: str = "1h"):
         self.symbol = symbol.upper()
         self.timeframe = timeframe
         
@@ -177,21 +177,31 @@ class ImplacableZonesDetector:
             price_low = self.market_data['low'].min()
             price_range = price_high - price_low
             
-            # Calculate dynamic zones based on REAL market structure (more aggressive ranges)
+            # Calculate dynamic zones based on RECENT market structure - FOCUS ON LATEST ZONES
             target_zones = {
-                'upper_supply': {
-                    'min': current_price + (price_range * 0.15), 
-                    'max': current_price + (price_range * 0.35), 
+                'recent_supply_close': {
+                    'min': current_price * 1.001,  # Very close supply zones (0.1% above)
+                    'max': current_price * 1.03,   # Up to 3% above current price
                     'type': 'SUPPLY'
                 },
-                'middle_supply': {
-                    'min': current_price + (price_range * 0.05), 
-                    'max': current_price + (price_range * 0.15), 
+                'recent_supply_medium': {
+                    'min': current_price * 1.03,   # Medium supply zones (3-8% above)
+                    'max': current_price * 1.08, 
                     'type': 'SUPPLY'
                 },
-                'lower_demand': {
-                    'min': current_price - (price_range * 0.15), 
-                    'max': current_price - (price_range * 0.05), 
+                'recent_supply_high': {
+                    'min': current_price * 1.08,   # Higher supply zones (8-15% above)
+                    'max': current_price * 1.15, 
+                    'type': 'SUPPLY'
+                },
+                'recent_demand_close': {
+                    'min': current_price * 0.97,   # Close demand zones (3% below)
+                    'max': current_price * 0.999,  # Just below current price
+                    'type': 'DEMAND'
+                },
+                'recent_demand_low': {
+                    'min': current_price * 0.85,   # Lower demand zones (15% below)
+                    'max': current_price * 0.97, 
                     'type': 'DEMAND'
                 }
             }
@@ -207,9 +217,9 @@ class ImplacableZonesDetector:
                         zone_swings.append(swing)
                 
                 if zone_swings:
-                    # Find the most significant swing in this zone
-                    # Prioritize by strength and volume
-                    best_swing = max(zone_swings, key=lambda s: (s['strength'], s['volume']))
+                    # Find the most RECENT swing in this zone (most important for current trading)
+                    # Prioritize by RECENCY (timestamp) first, then strength
+                    best_swing = max(zone_swings, key=lambda s: (s['timestamp'], s['strength']))
                     
                     # Calculate zone boundaries
                     zone_height = (zone_config['max'] - zone_config['min']) * 0.3  # 30% of target range
@@ -500,7 +510,7 @@ def main():
         return
     
     # Run implacable detection
-    detector = ImplacableZonesDetector("ETHUSDT", "1h")
+    detector = ImplacableZonesDetector("BTCUSDT", "1h")
     success = detector.run_implacable_detection()
     
     if success:

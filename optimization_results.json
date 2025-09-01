@@ -1,0 +1,70 @@
+{
+  "BTCUSDT": {
+    "precision": 33.33333333333333,
+    "params": {
+      "swing_length": 7,
+      "data_limit": 1000,
+      "zone_config": {
+        "supply_multipliers": [
+          1.01,
+          1.03,
+          1.08,
+          1.12
+        ],
+        "demand_multipliers": [
+          0.88,
+          0.92,
+          0.97,
+          0.99
+        ]
+      },
+      "zone_height_factor": 0.3
+    },
+    "details": {
+      "precision": 33.33333333333333,
+      "zones_found": 1,
+      "zones_expected": 3,
+      "details": {
+        "Upper Supply (~$120,142-131,064)": false,
+        "Middle Supply (~$112,497-120,142)": true,
+        "Lower Demand (~$98,298-105,943)": false
+      },
+      "swing_count": 89,
+      "data_candles": 1000
+    }
+  },
+  "ETHUSDT": {
+    "precision": 66.66666666666666,
+    "params": {
+      "swing_length": 7,
+      "data_limit": 1000,
+      "zone_config": {
+        "supply_multipliers": [
+          1.01,
+          1.03,
+          1.08,
+          1.12
+        ],
+        "demand_multipliers": [
+          0.88,
+          0.92,
+          0.97,
+          0.99
+        ]
+      },
+      "zone_height_factor": 0.3
+    },
+    "details": {
+      "precision": 66.66666666666666,
+      "zones_found": 2,
+      "zones_expected": 3,
+      "details": {
+        "Upper Supply (~$4,836-5,275)": false,
+        "Middle Supply (~$4,528-4,836)": true,
+        "Lower Demand (~$3,956-4,264)": true
+      },
+      "swing_count": 83,
+      "data_candles": 1000
+    }
+  }
+}
