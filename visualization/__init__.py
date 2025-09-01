@@ -1,0 +1,1 @@
+# Visualization module - Chart rendering and visual elements

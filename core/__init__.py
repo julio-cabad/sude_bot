@@ -1,0 +1,1 @@
+# Core module - Smart Money Concepts implementation

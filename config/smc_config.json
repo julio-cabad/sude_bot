@@ -1,0 +1,69 @@
+{
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "ADAUSDT",
+    "BNBUSDT",
+    "XRPUSDT",
+    "SOLUSDT",
+    "DOTUSDT",
+    "DOGEUSDT",
+    "AVAXUSDT",
+    "MATICUSDT",
+    "LINKUSDT",
+    "LTCUSDT",
+    "UNIUSDT",
+    "ATOMUSDT",
+    "FTMUSDT",
+    "NEARUSDT",
+    "ALGOUSDT",
+    "VETUSDT",
+    "ICPUSDT",
+    "FILUSDT"
+  ],
+  "timeframe": "1h",
+  "trading": {
+    "swing_length": 10,
+    "history_limit": 20,
+    "box_width": 2.5,
+    "atr_period": 50,
+    "atr_multiplier": 2.0,
+    "overlap_threshold_multiplier": 2.0
+  },
+  "performance": {
+    "max_memory_mb": 500,
+    "max_symbols": 40,
+    "max_zones_per_symbol": 15,
+    "max_swings_per_symbol": 50,
+    "batch_size": 10,
+    "max_workers": 8,
+    "update_frequency_seconds": 60,
+    "enable_caching": true,
+    "cache_size_mb": 100,
+    "cache_ttl_seconds": 300
+  },
+  "visualization": {
+    "supply_color": "#EDEDED",
+    "supply_outline_color": "#FFFFFF",
+    "demand_color": "#00FFFF",
+    "demand_outline_color": "#FFFFFF",
+    "poi_color": "#FFFFFF",
+    "zigzag_color": "#000000",
+    "zone_transparency": 70,
+    "show_zigzag": false,
+    "show_price_action_labels": true,
+    "show_poi_lines": true
+  },
+  "api": {
+    "timeout_seconds": 30,
+    "max_retries": 3,
+    "retry_delay_seconds": 5,
+    "max_candles_per_request": 1500
+  },
+  "system": {
+    "enable_logging": true,
+    "log_level": "INFO",
+    "debug_mode": false,
+    "enable_profiling": false
+  }
+}
