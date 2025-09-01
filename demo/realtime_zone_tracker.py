@@ -187,7 +187,16 @@ class RealTimeZoneTracker:
             print(f"\\n🎯 TOTAL ZONES DETECTED: {len(all_zones)}")
             for i, zone in enumerate(all_zones):
                 emoji = "🔺" if zone['type'] == 'SUPPLY' else "🔻"
-                print(f"   {i+1}. {emoji} {zone['type']} at ${zone['poi']:,.2f} ({zone['formation_candles_ago']} velas atrás)")
+                
+                # Convertir timestamp a UTC-5 (Ecuador)
+                from models.zone_alert import utc_to_ecuador, format_ecuador_time
+                ecuador_time = utc_to_ecuador(zone['swing_time'])
+                formatted_time = ecuador_time.strftime("%Y-%m-%d %H:%M ECT")
+                
+                print(f"   {i+1}. {emoji} {zone['type']} at ${zone['poi']:.3f}")
+                print(f"      📊 Rango: ${zone['bottom']:.3f} - ${zone['top']:.3f}")
+                print(f"      📅 Formación: {formatted_time}")
+                print(f"      ⏰ Hace: {zone['formation_candles_ago']} velas")
             
             return all_zones
             
@@ -446,14 +455,20 @@ class RealTimeZoneTracker:
         emoji = "🔺" if zone_data['type'] == 'SUPPLY' else "🔻"
         
         print(f"{emoji} TIPO: {zone_data['type']} ZONE #{zone_number}")
-        print(f"💰 POI (Point of Interest): ${zone_data['poi']:,.2f}")
-        print(f"📊 Rango de Zona: ${zone_data['bottom']:,.2f} - ${zone_data['top']:,.2f}")
-        print(f"📈 Precio Actual: ${current_price:,.2f}")
+        print(f"💰 POI (Point of Interest): ${zone_data['poi']:.3f}")
+        print(f"📊 Rango de Zona: ${zone_data['bottom']:.3f} - ${zone_data['top']:.3f}")
+        print(f"📈 Precio Actual: ${current_price:.3f}")
         print(f"📏 Distancia: {zone_data['distance_pct']:+.2f}% del precio actual")
         print(f"⏰ Formación: {zone_data['formation_candles_ago']} velas atrás")
         print(f"💪 Fuerza del Swing: {zone_data['swing_strength']}")
-        print(f"📅 Tiempo de Swing: {zone_data['swing_time']}")
-        print(f"🎯 ATR Usado: ${zone_data['atr_used']:,.2f}")
+        
+        # Convertir tiempo a UTC-5 (Ecuador) con formato mejorado
+        from models.zone_alert import utc_to_ecuador
+        ecuador_time = utc_to_ecuador(zone_data['swing_time'])
+        formatted_time = ecuador_time.strftime("%Y-%m-%d %H:%M ECT")
+        print(f"📅 Tiempo de Formación: {formatted_time}")
+        
+        print(f"🎯 ATR Usado: ${zone_data['atr_used']:.3f}")
         print(f"📊 Timeframe: {self.timeframe}")
         
         # 🧠 ANÁLISIS DE ZONA ANTERIOR - CONOCIMIENTO ES PODER
@@ -465,9 +480,13 @@ class RealTimeZoneTracker:
             
             print(f"\\n🧠 CONTEXTO DE ZONA ANTERIOR - CONOCIMIENTO TÁCTICO:")
             print("-" * 60)
-            print(f"{prev_emoji} ZONA ANTERIOR: {prev_zone['type']} at ${prev_zone['poi']:,.2f}")
-            print(f"   📅 Formada: {prev_zone['formation_candles_ago']} velas atrás")
-            print(f"   📊 Rango: ${prev_zone['bottom']:,.2f} - ${prev_zone['top']:,.2f}")
+            print(f"{prev_emoji} ZONA ANTERIOR: {prev_zone['type']} at ${prev_zone['poi']:.3f}")
+            
+            # Convertir tiempo anterior a UTC-5
+            prev_ecuador_time = utc_to_ecuador(prev_zone['swing_time'])
+            prev_formatted_time = prev_ecuador_time.strftime("%Y-%m-%d %H:%M ECT")
+            print(f"   📅 Formada: {prev_formatted_time} ({prev_zone['formation_candles_ago']} velas atrás)")
+            print(f"   📊 Rango: ${prev_zone['bottom']:.3f} - ${prev_zone['top']:.3f}")
             
             # Análisis de estructura de mercado
             print(f"\\n⚔️ ANÁLISIS DE ESTRUCTURA DE MERCADO:")
@@ -478,7 +497,7 @@ class RealTimeZoneTracker:
             # Cálculo de distancia entre zonas
             distance_between_zones = abs(zone_data['poi'] - prev_zone['poi'])
             distance_pct = (distance_between_zones / prev_zone['poi']) * 100
-            print(f"   📏 Distancia entre zonas: ${distance_between_zones:,.2f} ({distance_pct:.2f}%)")
+            print(f"   📏 Distancia entre zonas: ${distance_between_zones:.3f} ({distance_pct:.2f}%)")
             
         else:
             print(f"\\n🧠 CONTEXTO: Esta es la PRIMERA zona detectada en esta sesión")
@@ -492,7 +511,14 @@ class RealTimeZoneTracker:
                 if zone_num > 0:
                     zone_emoji = "🔺" if zone['type'] == 'SUPPLY' else "🔻"
                     status = "🆕 NUEVA" if zone_num == zone_number else "📍"
-                    print(f"   {status} {zone_emoji} Zona #{zone_num}: {zone['type']} at ${zone['poi']:,.2f} ({zone['formation_candles_ago']} velas atrás)")
+                    
+                    # Convertir tiempo a UTC-5 para historial
+                    hist_ecuador_time = utc_to_ecuador(zone['swing_time'])
+                    hist_formatted_time = hist_ecuador_time.strftime("%m-%d %H:%M")
+                    
+                    print(f"   {status} {zone_emoji} Zona #{zone_num}: {zone['type']} at ${zone['poi']:.3f}")
+                    print(f"      📊 Rango: ${zone['bottom']:.3f} - ${zone['top']:.3f}")
+                    print(f"      📅 {hist_formatted_time} ECT ({zone['formation_candles_ago']} velas atrás)")
         
         # Análisis de trading mejorado
         print(f"\\n📋 ANÁLISIS PARA TRADING:")
