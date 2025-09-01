@@ -1,0 +1,67 @@
+[
+  {
+    "symbol": "ADAUSDT",
+    "action": "SELL",
+    "entry_price": 0.82,
+    "stop_loss": 0.8399599999999999,
+    "take_profit": 0.74016,
+    "risk_reward_ratio": 4.0,
+    "zone_type": "SUPPLY",
+    "poi": 0.83,
+    "timestamp": "2025-09-01 18:20:25 ECT",
+    "timeframe": "1m",
+    "detection_time": "2025-09-01 18:20:25.646450"
+  },
+  {
+    "symbol": "ETHUSDT",
+    "action": "SELL",
+    "entry_price": 4280.87,
+    "stop_loss": 4352.72544,
+    "take_profit": 4029.375959999999,
+    "risk_reward_ratio": 3.5,
+    "zone_type": "SUPPLY",
+    "poi": 4306.99,
+    "timestamp": "2025-09-01 18:23:07 ECT",
+    "timeframe": "1m",
+    "detection_time": "2025-09-01 18:23:07.215476"
+  },
+  {
+    "symbol": "ADAUSDT",
+    "action": "SELL",
+    "entry_price": 0.79,
+    "stop_loss": 0.8096000000000001,
+    "take_profit": 0.7115999999999998,
+    "risk_reward_ratio": 4.0,
+    "zone_type": "SUPPLY",
+    "poi": 0.8,
+    "timestamp": "2025-09-01 18:23:07 ECT",
+    "timeframe": "1m",
+    "detection_time": "2025-09-01 18:23:07.222570"
+  },
+  {
+    "symbol": "BTCUSDT",
+    "action": "SELL",
+    "entry_price": 108063.66,
+    "stop_loss": 109553.61284999999,
+    "take_profit": 103593.80145000004,
+    "risk_reward_ratio": 3.0,
+    "zone_type": "SUPPLY",
+    "poi": 108725.1,
+    "timestamp": "2025-09-01 18:24:02 ECT",
+    "timeframe": "1m",
+    "detection_time": "2025-09-01 18:24:02.294700"
+  },
+  {
+    "symbol": "BTCUSDT",
+    "action": "BUY",
+    "entry_price": 109212.7,
+    "stop_loss": 107725.79435000001,
+    "take_profit": 113673.41694999996,
+    "risk_reward_ratio": 3.0,
+    "zone_type": "DEMAND",
+    "poi": 108550.8,
+    "timestamp": "2025-09-01 18:32:08 ECT",
+    "timeframe": "1m",
+    "detection_time": "2025-09-01 18:32:08.554312"
+  }
+]
