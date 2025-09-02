@@ -119,17 +119,10 @@ class RealTimeZoneTracker:
             self.recent_swings.sort(key=lambda s: s.timestamp, reverse=True)
             
             detection_time = time.time() - start_time
-            
-            print(f"🎯 RECENT SWING DETECTION COMPLETE!")
-            print(f"   ⏱️  Detection time: {detection_time:.3f}s")
-            print(f"   📊 Total swings found: {len(all_swings)}")
-            print(f"   🎯 Significant recent swings: {len(self.recent_swings)}")
+    
             
             if self.recent_swings:
                 latest_swing = self.recent_swings[0]
-                print(f"   🔥 LATEST SWING: {latest_swing.swing_type.name} at ${latest_swing.price:,.2f}")
-                print(f"      📅 Time: {latest_swing.timestamp}")
-                print(f"      💪 Strength: {latest_swing.strength}")
             
             return True
             

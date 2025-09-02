@@ -38,10 +38,6 @@ class ImplacableZonesDetector:
         self.symbol = symbol.upper()
         self.timeframe = timeframe
         
-        print(f"🔥⚔️ IMPLACABLE ZONES DETECTOR FOR {self.symbol} ⚔️🔥")
-        print("🏛️ PRECISIÓN ABSOLUTA - TRADINGVIEW MATCH OR DIE 🏛️")
-        print("=" * 70)
-        
         # Initialize components
         self.swing_detector = SwingDetector(symbol)
         
@@ -50,24 +46,16 @@ class ImplacableZonesDetector:
         self.swings: List = []
         self.implacable_zones: Dict = {}
         
-        print(f"✅ Implacable Detector initialized for {self.symbol}")
     
     def fetch_extended_data(self, limit: int = 1000) -> bool:
         """Fetch EXTENDED data to catch all significant levels"""
         try:
-            print(f"\\n📡 FETCHING EXTENDED {self.symbol} DATA...")
-            print("-" * 50)
             
             robot = RobotBinance(self.symbol, self.timeframe)
             self.market_data = robot.candlestick(limit=limit)
             
             if self.market_data.empty:
                 raise ValueError(f"No data received for {self.symbol}")
-            
-            print(f"✅ SUCCESS! Fetched {len(self.market_data)} candles")
-            print(f"📅 Extended range: {self.market_data.index[0]} to {self.market_data.index[-1]}")
-            print(f"💰 Full price range: ${self.market_data['low'].min():,.2f} - ${self.market_data['high'].max():,.2f}")
-            print(f"📈 Current price: ${self.market_data['close'].iloc[-1]:,.2f}")
             
             return True
             
@@ -78,8 +66,6 @@ class ImplacableZonesDetector:
     def detect_all_swings(self) -> bool:
         """Detect ALL possible swings with maximum sensitivity"""
         try:
-            print(f"\\n⚔️ DETECTING ALL POSSIBLE SWINGS...")
-            print("-" * 50)
             
             start_time = time.time()
             self.swings = self.swing_detector.detect_swings(self.market_data)
@@ -89,20 +75,10 @@ class ImplacableZonesDetector:
                 print("⚠️ No swings detected")
                 return False
             
-            print(f"🎯 SWING DETECTION COMPLETE!")
-            print(f"   ⏱️  Detection time: {detection_time:.3f}s")
-            print(f"   📊 Total swings: {len(self.swings)}")
             
             # Analyze swing distribution
             swing_prices = [s.price for s in self.swings]
             swing_prices.sort()
-            
-            print(f"   💰 Swing range: ${swing_prices[0]:,.2f} - ${swing_prices[-1]:,.2f}")
-            print(f"   📊 Price quartiles:")
-            print(f"      Q1 (25%): ${np.percentile(swing_prices, 25):,.2f}")
-            print(f"      Q2 (50%): ${np.percentile(swing_prices, 50):,.2f}")
-            print(f"      Q3 (75%): ${np.percentile(swing_prices, 75):,.2f}")
-            print(f"      Q4 (95%): ${np.percentile(swing_prices, 95):,.2f}")
             
             return True
             
@@ -112,19 +88,12 @@ class ImplacableZonesDetector:
     
     def extract_implacable_zones(self) -> bool:
         """Extract zones with IMPLACABLE precision matching TradingView"""
-        try:
-            print(f"\\n🏛️ EXTRACTING IMPLACABLE ZONES...")
-            print("-" * 50)
-            
+        try:            
             if not self.swings:
                 print("⚠️ No swings available")
                 return False
             
             current_price = float(self.market_data['close'].iloc[-1])
-            
-            # IMPLACABLE ANALYSIS: Find the EXACT zones TradingView shows
-            print(f"📊 IMPLACABLE ANALYSIS:")
-            print(f"   Current Price: ${current_price:,.2f}")
             
             # Get ALL swing data with detailed analysis
             swing_analysis = []
@@ -162,8 +131,6 @@ class ImplacableZonesDetector:
             
             # Sort by price for systematic analysis
             swing_analysis.sort(key=lambda x: x['price'])
-            
-            print(f"   📊 Analyzing {len(swing_analysis)} swings...")
             
             # IMPLACABLE ZONE IDENTIFICATION
             # DYNAMIC zone calculation based on current price and market structure
@@ -258,11 +225,7 @@ class ImplacableZonesDetector:
                 'total_swings_analyzed': len(swing_analysis),
                 'detection_method': 'implacable_tradingview_match'
             }
-            
-            print(f"🎯 IMPLACABLE ZONE EXTRACTION COMPLETE!")
-            print(f"   📊 Supply zones: {len(supply_zones)}")
-            print(f"   📊 Demand zones: {len(demand_zones)}")
-            print(f"   📊 Total zones: {len(detected_zones)}")
+        
             
             return True
             
@@ -338,7 +301,6 @@ class ImplacableZonesDetector:
                 print(f"{color}{symbol} {zona} {recom}  {rango} {precio} {fecha}{reset}")
             
             print("─" * 100)
-            print(f"🏆 Total zonas: {len(all_zones)} | 🔊 Sistema: ACTIVO | 💡 Presiona Ctrl+C para salir")
             print("═" * 100)
             
         except Exception as e:
@@ -415,9 +377,6 @@ class ImplacableZonesDetector:
     def run_implacable_detection(self) -> bool:
         """Run complete IMPLACABLE detection"""
         try:
-            print(f"\\n🔥⚔️ STARTING IMPLACABLE DETECTION ⚔️🔥")
-            print("🏛️ TRADINGVIEW PRECISION OR DEATH! 🏛️")
-            print("=" * 70)
             
             start_time = time.time()
             
@@ -435,17 +394,8 @@ class ImplacableZonesDetector:
             
             total_time = time.time() - start_time
             
-            print(f"\\n🏆 IMPLACABLE DETECTION COMPLETE! 🏆")
-            print("=" * 70)
-            print(f"⏱️  Total time: {total_time:.3f}s")
-            print(f"📊 Data analyzed: {len(self.market_data)} candles")
-            print(f"⚔️ Swings processed: {len(self.swings)}")
-            print(f"🏛️ Zones extracted: {len(self.implacable_zones.get('supply', [])) + len(self.implacable_zones.get('demand', []))}")
-            
             # ¡MOSTRAR TABLA ÉPICA!
             self.display_epic_zones_table()
-            
-            print(f"\\n🔥 IMPLACABLE PRECISION: ACTIVATED! 🔥")
             
             return True
             

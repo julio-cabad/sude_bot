@@ -434,7 +434,6 @@ class MultiSymbolMonitor:
         }
         
         try:
-            print(f"🔍 Processing {symbol} on {self.timeframe} (Worker: {threading.current_thread().name})")
             
             # Verificar si el símbolo sigue activo
             with self.symbol_lock:
@@ -655,7 +654,6 @@ class MultiSymbolMonitor:
                 zones_detected = result.get('zones_detected', [])
                 
                 if zones_detected:
-                    print(f"🚨 {len(zones_detected)} new zones detected for {symbol}!")
                     
                     # Procesar cada zona
                     for zone_data in zones_detected:
@@ -703,7 +701,6 @@ class MultiSymbolMonitor:
             zone_data: Datos de la zona
         """
         try:
-            print(f"🏛️ Processing new zone for {symbol}: {zone_data.get('type', 'UNKNOWN')}")
             
             # Actualizar contador de alertas del símbolo
             with self.symbol_lock:

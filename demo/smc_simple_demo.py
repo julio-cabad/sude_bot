@@ -103,21 +103,12 @@ class SimpleSMCDemo:
             high_swings = [s for s in self.swings if s.swing_type == SwingType.HIGH]
             low_swings = [s for s in self.swings if s.swing_type == SwingType.LOW]
             
-            print(f"🎯 EPIC SWING DETECTION COMPLETE!")
-            print(f"   ⏱️  Detection time: {detection_time:.3f}s")
-            print(f"   📊 Total swings: {len(self.swings)}")
-            print(f"   🔺 Swing highs: {len(high_swings)}")
-            print(f"   🔻 Swing lows: {len(low_swings)}")
-            
             # Show recent swings
             print(f"\\n🏛️ RECENT SWING POINTS (Last 5):")
             recent_swings = sorted(self.swings, key=lambda s: s.timestamp)[-5:]
             
             for i, swing in enumerate(recent_swings):
                 swing_emoji = "🔺" if swing.swing_type == SwingType.HIGH else "🔻"
-                print(f"   {i+1}. {swing_emoji} {swing.swing_type.value} at ${swing.price:,.2f}")
-                print(f"      📅 Time: {swing.timestamp.strftime('%Y-%m-%d %H:%M')}")
-                print(f"      💪 Strength: {swing.strength}")
             
             return True
             

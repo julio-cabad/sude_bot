@@ -395,7 +395,6 @@ class RealTimeZoneMonitor:
             zones_detected = self._simulate_zone_detection(symbol)
             
             if zones_detected:
-                print(f"🚨 New zones detected for {symbol}!")
                 
                 # Actualizar estadísticas
                 if self.current_session:
@@ -429,7 +428,6 @@ class RealTimeZoneMonitor:
             zone_data: Datos de la zona
         """
         try:
-            print(f"🏛️ Processing new zone for {symbol}: {zone_data.get('type', 'UNKNOWN')}")
             
             # Llamar callbacks de zona detectada
             self._call_zone_detected_callbacks(symbol, zone_data)

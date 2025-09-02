@@ -38,10 +38,6 @@ class ImplacableZonesDetector:
         self.symbol = symbol.upper()
         self.timeframe = timeframe
         
-        print(f"🔥⚔️ IMPLACABLE ZONES DETECTOR FOR {self.symbol} ⚔️🔥")
-        print("🏛️ PRECISIÓN ABSOLUTA - TRADINGVIEW MATCH OR DIE 🏛️")
-        print("=" * 70)
-        
         # Initialize components
         self.swing_detector = SwingDetector(symbol)
         
@@ -50,14 +46,10 @@ class ImplacableZonesDetector:
         self.swings: List = []
         self.implacable_zones: Dict = {}
         
-        print(f"✅ Implacable Detector initialized for {self.symbol}")
     
     def fetch_extended_data(self, limit: int = 1000) -> bool:
         """Fetch EXTENDED data to catch all significant levels"""
         try:
-            print(f"\\n📡 FETCHING EXTENDED {self.symbol} DATA...")
-            print("-" * 50)
-            
             robot = RobotBinance(self.symbol, self.timeframe)
             self.market_data = robot.candlestick(limit=limit)
             
@@ -78,8 +70,6 @@ class ImplacableZonesDetector:
     def detect_all_swings(self) -> bool:
         """Detect ALL possible swings with maximum sensitivity"""
         try:
-            print(f"\\n⚔️ DETECTING ALL POSSIBLE SWINGS...")
-            print("-" * 50)
             
             start_time = time.time()
             self.swings = self.swing_detector.detect_swings(self.market_data)
@@ -88,21 +78,11 @@ class ImplacableZonesDetector:
             if not self.swings:
                 print("⚠️ No swings detected")
                 return False
-            
-            print(f"🎯 SWING DETECTION COMPLETE!")
-            print(f"   ⏱️  Detection time: {detection_time:.3f}s")
-            print(f"   📊 Total swings: {len(self.swings)}")
+
             
             # Analyze swing distribution
             swing_prices = [s.price for s in self.swings]
             swing_prices.sort()
-            
-            print(f"   💰 Swing range: ${swing_prices[0]:,.2f} - ${swing_prices[-1]:,.2f}")
-            print(f"   📊 Price quartiles:")
-            print(f"      Q1 (25%): ${np.percentile(swing_prices, 25):,.2f}")
-            print(f"      Q2 (50%): ${np.percentile(swing_prices, 50):,.2f}")
-            print(f"      Q3 (75%): ${np.percentile(swing_prices, 75):,.2f}")
-            print(f"      Q4 (95%): ${np.percentile(swing_prices, 95):,.2f}")
             
             return True
             
@@ -121,10 +101,7 @@ class ImplacableZonesDetector:
                 return False
             
             current_price = float(self.market_data['close'].iloc[-1])
-            
-            # IMPLACABLE ANALYSIS: Find the EXACT zones TradingView shows
-            print(f"📊 IMPLACABLE ANALYSIS:")
-            print(f"   Current Price: ${current_price:,.2f}")
+        
             
             # Get ALL swing data with detailed analysis
             swing_analysis = []
@@ -451,9 +428,6 @@ class ImplacableZonesDetector:
     def run_implacable_detection(self) -> bool:
         """Run complete IMPLACABLE detection"""
         try:
-            print(f"\\n🔥⚔️ STARTING IMPLACABLE DETECTION ⚔️🔥")
-            print("🏛️ TRADINGVIEW PRECISION OR DEATH! 🏛️")
-            print("=" * 70)
             
             start_time = time.time()
             
