@@ -241,12 +241,6 @@ class SimpleSMCDemo:
             supply_pois = [p for p in self.pois if p.poi_type == POIType.SUPPLY_POI]
             demand_pois = [p for p in self.pois if p.poi_type == POIType.DEMAND_POI]
             
-            print(f"🎯 EPIC POI CALCULATION COMPLETE!")
-            print(f"   ⏱️  Calculation time: {calculation_time:.3f}s")
-            print(f"   📊 Total POIs: {len(self.pois)}")
-            print(f"   🔺 Supply POIs: {len(supply_pois)}")
-            print(f"   🔻 Demand POIs: {len(demand_pois)}")
-            
             # Show POI details
             current_price = float(self.market_data['close'].iloc[-1])
             
@@ -254,9 +248,6 @@ class SimpleSMCDemo:
             for poi in self.pois[:10]:  # Top 10 POIs
                 distance = poi.get_distance_from_price(current_price)
                 poi_emoji = "🔺" if poi.poi_type == POIType.SUPPLY_POI else "🔻"
-                print(f"   {poi_emoji} ${poi.price:,.2f} - {poi.strength.value}")
-                print(f"      📏 Distance: {distance['percentage_distance']:.2f}% {distance['direction']}")
-                print(f"      💪 Confidence: {poi.confidence_score:.1f}%")
             
             return True
             

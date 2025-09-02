@@ -247,12 +247,7 @@ class SMCZonesDemo:
             # Analyze POI results like a TITAN
             supply_pois = [p for p in self.pois if p.poi_type == POIType.SUPPLY_POI]
             demand_pois = [p for p in self.pois if p.poi_type == POIType.DEMAND_POI]
-            
-            print(f"🎯 EPIC POI CALCULATION COMPLETE!")
-            print(f"   ⏱️  Calculation time: {calculation_time:.3f}s")
-            print(f"   📊 Total POIs: {len(self.pois)}")
-            print(f"   🔺 Supply POIs: {len(supply_pois)}")
-            print(f"   🔻 Demand POIs: {len(demand_pois)}")
+        
             
             # Show POI details like a GLADIATOR
             current_price = float(self.market_data['close'].iloc[-1])
@@ -260,23 +255,11 @@ class SMCZonesDemo:
             # Get nearest POIs
             nearest_pois = self.poi_calculator.get_nearest_poi_levels(current_price, max_distance_pct=10.0)
             
-            print(f"\\n🎯 NEAREST POI LEVELS:")
-            
-            print(f"\\n🔺 RESISTANCE POIs (Above current price):")
             for i, poi in enumerate(nearest_pois['above'][:5]):
                 distance = poi.get_distance_from_price(current_price)
-                print(f"   {i+1}. ${poi.price:,.2f} - {poi.strength.value}")
-                print(f"      📏 Distance: {distance['percentage_distance']:.2f}% above")
-                print(f"      💪 Confidence: {poi.confidence_score:.1f}%")
-                print(f"      🔧 Method: {poi.calculation_method}")
-            
             print(f"\\n🔻 SUPPORT POIs (Below current price):")
             for i, poi in enumerate(nearest_pois['below'][:5]):
                 distance = poi.get_distance_from_price(current_price)
-                print(f"   {i+1}. ${poi.price:,.2f} - {poi.strength.value}")
-                print(f"      📏 Distance: {distance['percentage_distance']:.2f}% below")
-                print(f"      💪 Confidence: {poi.confidence_score:.1f}%")
-                print(f"      🔧 Method: {poi.calculation_method}")
             
             return True
             
