@@ -93,14 +93,25 @@ class FinalDestroyer:
     
     def _load_env(self):
         """🔧 CARGA CREDENCIALES"""
-        env_file = Path(".env")
+        # Buscar .env en el directorio raíz del proyecto
+        project_root = Path(__file__).parent.parent
+        env_file = project_root / ".env"
+        
+        print(f"🔍 Buscando credenciales en: {env_file}")
+        
         if env_file.exists():
+            print("✅ Archivo .env encontrado!")
             with open(env_file, 'r') as f:
                 for line in f:
                     line = line.strip()
                     if line and not line.startswith('#') and '=' in line:
                         key, value = line.split('=', 1)
                         os.environ[key.strip()] = value.strip()
+                        if key.strip() == 'BINANCE_API_KEY':
+                            print(f"✅ BINANCE_API_KEY cargada: {value[:10]}...")
+        else:
+            print(f"❌ Archivo .env NO encontrado en: {env_file}")
+            print("💡 Ejecuta: python backtesting/setup_env.py")
     
     def _setup_callback(self):
         """🎯 CONFIGURA CALLBACK ÚNICO"""
@@ -306,15 +317,15 @@ def main():
     
     print("🎯⚔️🏛️ FINAL DESTROYER - VERSIÓN DEFINITIVA 🏛️⚔️🎯")
     
-    # Verificar credenciales
+    # Crear destructor final (esto carga las credenciales del .env)
+    destroyer = FinalDestroyer()
+    
+    # Verificar credenciales DESPUÉS de cargarlas
     api_key = os.getenv('BINANCE_API_KEY')
     if not api_key:
         print("❌ Credenciales no encontradas")
         print("💡 Ejecuta: python backtesting/setup_env.py")
         return 1
-    
-    # Crear destructor final
-    destroyer = FinalDestroyer()
     
     try:
         if destroyer.start():

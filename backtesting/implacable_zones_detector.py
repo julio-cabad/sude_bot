@@ -272,6 +272,94 @@ class ImplacableZonesDetector:
             traceback.print_exc()
             return False
     
+    def display_epic_zones_table(self):
+        """🏆⚔️ TABLA ÉPICA DE ZONAS - FORMATO SUPREMO ⚔️🏆"""
+        try:
+            if not self.implacable_zones:
+                print("❌ No hay zonas para mostrar")
+                return
+            
+            current_price = self.implacable_zones['current_price']
+            
+            # Combinar todas las zonas
+            all_zones = []
+            
+            # Procesar zonas SUPPLY
+            for zone in self.implacable_zones['supply']:
+                zone_data = {
+                    'symbol': self.symbol,
+                    'zona': zone['type'],
+                    'recomendacion': 'SELL',
+                    'rango': f"${zone['bottom']:.2f} - ${zone['top']:.2f}",
+                    'precio_actual': f"${current_price:.2f}",
+                    'fecha_hora': self._convert_to_utc_minus_5(zone['formation_date'])
+                }
+                all_zones.append(zone_data)
+            
+            # Procesar zonas DEMAND
+            for zone in self.implacable_zones['demand']:
+                zone_data = {
+                    'symbol': self.symbol,
+                    'zona': zone['type'],
+                    'recomendacion': 'BUY',
+                    'rango': f"${zone['bottom']:.2f} - ${zone['top']:.2f}",
+                    'precio_actual': f"${current_price:.2f}",
+                    'fecha_hora': self._convert_to_utc_minus_5(zone['formation_date'])
+                }
+                all_zones.append(zone_data)
+            
+            # Mostrar tabla épica
+            print("\n🏆⚔️🏛️ TABLA SUPREMA DE ZONAS IMPLACABLES 🏛️⚔️🏆")
+            print("═" * 100)
+            print(f"🕐 Actualizado: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} UTC-5")
+            print("═" * 100)
+            print("SÍMBOLO   ZONA     RECOMENDACIÓN  RANGO                    PRECIO ACTUAL    FECHA HORA")
+            print("─" * 100)
+            
+            for zone in all_zones:
+                symbol = zone['symbol'][:8].ljust(8)
+                zona = zone['zona'][:8].ljust(8)
+                recom = zone['recomendacion'][:12].ljust(12)
+                rango = zone['rango'][:22].ljust(22)
+                precio = zone['precio_actual'][:14].ljust(14)
+                fecha = zone['fecha_hora']
+                
+                # Color según recomendación
+                if zone['recomendacion'] == 'BUY':
+                    color = '\033[92m'  # Verde
+                    reset = '\033[0m'
+                elif zone['recomendacion'] == 'SELL':
+                    color = '\033[91m'  # Rojo
+                    reset = '\033[0m'
+                else:
+                    color = ''
+                    reset = ''
+                
+                print(f"{color}{symbol} {zona} {recom}  {rango} {precio} {fecha}{reset}")
+            
+            print("─" * 100)
+            print(f"🏆 Total zonas: {len(all_zones)} | 🔊 Sistema: ACTIVO | 💡 Presiona Ctrl+C para salir")
+            print("═" * 100)
+            
+        except Exception as e:
+            print(f"❌ Error mostrando tabla épica: {e}")
+    
+    def _convert_to_utc_minus_5(self, date_str: str) -> str:
+        """🕐 CONVIERTE FECHA A UTC-5 FORMATO YYYY-MM-DD HH:MM"""
+        try:
+            # Parsear fecha original
+            dt = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+            
+            # Convertir a UTC-5 (restar 5 horas)
+            dt_utc_minus_5 = dt - timedelta(hours=5)
+            
+            # Formatear como YYYY-MM-DD HH:MM
+            return dt_utc_minus_5.strftime('%Y-%m-%d %H:%M')
+            
+        except Exception as e:
+            print(f"❌ Error convirtiendo fecha: {e}")
+            return date_str
+
     def export_implacable_json(self) -> Dict:
         """Export implacable zones as clean JSON"""
         try:
@@ -353,6 +441,9 @@ class ImplacableZonesDetector:
             print(f"📊 Data analyzed: {len(self.market_data)} candles")
             print(f"⚔️ Swings processed: {len(self.swings)}")
             print(f"🏛️ Zones extracted: {len(self.implacable_zones.get('supply', [])) + len(self.implacable_zones.get('demand', []))}")
+            
+            # ¡MOSTRAR TABLA ÉPICA!
+            self.display_epic_zones_table()
             
             print(f"\\n🔥 IMPLACABLE PRECISION: ACTIVATED! 🔥")
             

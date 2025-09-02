@@ -481,7 +481,7 @@ class MultiSymbolMonitor:
         """
         try:
             # Importar el detector real
-            from demo.implacable_zones_detector import ImplacableZonesDetector
+            from backtesting.implacable_zones_detector import ImplacableZonesDetector
             
             # Crear detector para este símbolo
             detector = ImplacableZonesDetector(symbol=symbol, timeframe=self.timeframe)
@@ -499,46 +499,83 @@ class MultiSymbolMonitor:
             if not zones_data:
                 return []
             
-            # Convertir a formato esperado por nuestro sistema
+            # Obtener precio actual para filtros
+            current_price = zones_data.get('current_price', 0)
+            
+            # Convertir a formato esperado con FILTROS INTELIGENTES
             detected_zones = []
             
-            # Procesar zonas de supply
+            # Procesar zonas de supply con filtros
             for zone in zones_data.get('supply_zones', []):
+                # FILTROS PARA TIMEFRAME 1M:
+                distance_pct = float(zone['distance_percentage'].replace('%', '').replace('+', ''))
+                
+                # 1. Solo zonas cercanas al precio actual (máximo 5% de distancia)
+                if abs(distance_pct) > 5.0:
+                    continue
+                
+                # 2. Solo zonas recientes (máximo 1440 velas = 24 horas para 1m)
+                candles_ago = self._calculate_candles_ago(zone['formation_date'])
+                if candles_ago > 1440:  # Más de 24 horas
+                    continue
+                
                 zone_dict = {
                     'type': 'SUPPLY',
                     'poi': zone['poi'],
                     'top': zone['top'],
                     'bottom': zone['bottom'],
-                    'distance_pct': float(zone['distance_percentage'].replace('%', '').replace('+', '')),
-                    'formation_candles_ago': self._calculate_candles_ago(zone['formation_date']),
+                    'distance_pct': distance_pct,
+                    'formation_candles_ago': candles_ago,
                     'strength': zone['strength'],
                     'volume': zone['volume'],
                     'zone_name': zone['name'],
                     'swings_in_zone': zone['swings_in_zone'],
-                    'current_price': zones_data['current_price'],
-                    'detection_method': 'implacable_real_data'
+                    'current_price': current_price,
+                    'detection_method': 'implacable_filtered'
                 }
                 detected_zones.append(zone_dict)
             
-            # Procesar zonas de demand
+            # Procesar zonas de demand con filtros
             for zone in zones_data.get('demand_zones', []):
+                # FILTROS PARA TIMEFRAME 1M:
+                distance_pct = float(zone['distance_percentage'].replace('%', '').replace('+', ''))
+                
+                # 1. Solo zonas cercanas al precio actual (máximo 5% de distancia)
+                if abs(distance_pct) > 5.0:
+                    continue
+                
+                # 2. Solo zonas recientes (máximo 1440 velas = 24 horas para 1m)
+                candles_ago = self._calculate_candles_ago(zone['formation_date'])
+                if candles_ago > 1440:  # Más de 24 horas
+                    continue
+                
                 zone_dict = {
                     'type': 'DEMAND',
                     'poi': zone['poi'],
                     'top': zone['top'],
                     'bottom': zone['bottom'],
-                    'distance_pct': float(zone['distance_percentage'].replace('%', '').replace('+', '')),
-                    'formation_candles_ago': self._calculate_candles_ago(zone['formation_date']),
+                    'distance_pct': distance_pct,
+                    'formation_candles_ago': candles_ago,
                     'strength': zone['strength'],
                     'volume': zone['volume'],
                     'zone_name': zone['name'],
                     'swings_in_zone': zone['swings_in_zone'],
-                    'current_price': zones_data['current_price'],
-                    'detection_method': 'implacable_real_data'
+                    'current_price': current_price,
+                    'detection_method': 'implacable_filtered'
                 }
                 detected_zones.append(zone_dict)
             
-            print(f"🔥 Detectadas {len(detected_zones)} zonas reales para {symbol}")
+            # Añadir símbolo a cada zona para el callback
+            for zone in detected_zones:
+                zone['symbol'] = symbol
+            
+            total_zones = len(zones_data.get('supply_zones', [])) + len(zones_data.get('demand_zones', []))
+            print(f"🔥 {symbol}: {len(detected_zones)} zonas relevantes de {total_zones} totales (precio actual: ${current_price:,.2f})")
+            
+            if detected_zones:
+                for zone in detected_zones:
+                    print(f"   ✅ {zone['type']} POI=${zone['poi']:,.2f} distancia={zone['distance_pct']:+.1f}% hace={zone['formation_candles_ago']} velas")
+            
             return detected_zones
             
         except Exception as e:
