@@ -569,11 +569,11 @@ class MultiSymbolMonitor:
                 zone['symbol'] = symbol
             
             total_zones = len(zones_data.get('supply_zones', [])) + len(zones_data.get('demand_zones', []))
-            print(f"🔥 {symbol}: {len(detected_zones)} zonas relevantes de {total_zones} totales (precio actual: ${current_price:,.2f})")
+            # Silencioso
             
             if detected_zones:
-                for zone in detected_zones:
-                    print(f"   ✅ {zone['type']} POI=${zone['poi']:,.2f} distancia={zone['distance_pct']:+.1f}% hace={zone['formation_candles_ago']} velas")
+                # Procesamiento silencioso de zonas
+                pass
             
             return detected_zones
             
